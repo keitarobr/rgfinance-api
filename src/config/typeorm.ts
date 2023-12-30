@@ -1,9 +1,9 @@
-import {registerAs} from '@nestjs/config';
-import {DataSource, DataSourceOptions} from 'typeorm';
+import { registerAs } from '@nestjs/config';
+import { DataSource, DataSourceOptions } from 'typeorm';
 
 const config = {
     type: 'postgres',
-    host: '192.168.42.3',
+    host: 'localhost',
     port: '5432',
     username: 'rgfinance',
     password: 'rgfinance',

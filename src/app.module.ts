@@ -1,9 +1,9 @@
-import {Module} from '@nestjs/common';
-import {AppController} from './app.controller';
-import {AppService} from './app.service';
-import {TypeOrmModule} from '@nestjs/typeorm';
-import {ConfigModule, ConfigService} from '@nestjs/config';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ControllerModule } from './controller/controller.module';
 import typeorm from './config/typeorm';
+import { DomainModule } from './domain/domain.module';
 
 @Module({
     imports: [
@@ -16,8 +16,10 @@ import typeorm from './config/typeorm';
             useFactory: async (configService: ConfigService) =>
                 configService.get('typeorm'),
         }),
+        ControllerModule,
+        DomainModule,
     ],
-    controllers: [AppController],
-    providers: [AppService],
+    controllers: [],
+    providers: [],
 })
-export class AppModule {}
+export class AppModule { }
