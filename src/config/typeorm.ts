@@ -8,7 +8,7 @@ const config = {
     username: 'rgfinance',
     password: 'rgfinance',
     database: 'rgfinance',
-    entities: ['dist/model/*.entity{.ts,.js}'],
+    entities: ['dist/domain/*.entity{.ts,.js}'],
     migrations: ['dist/migrations/*{.ts,.js}'],
     autoLoadEntities: true,
     synchronize: false,
