@@ -4,12 +4,15 @@ import { Not, Repository } from 'typeorm';
 import { CategoryDTO } from './category.dto';
 import { CreateCategoryDTO } from './create-category.dto';
 import { Category } from './category.entity';
+import { MonetaryTransaction } from './monetary-transaction.entity';
 
 @Injectable()
 export class CategoryService {
     constructor(
         @InjectRepository(Category)
         private categoriesRepository: Repository<Category>,
+        @InjectRepository(MonetaryTransaction)
+        private transactionsRepository: Repository<MonetaryTransaction>
     ) { }
 
     create(category: CreateCategoryDTO) {
@@ -27,7 +30,7 @@ export class CategoryService {
     }
 
     findAll() {
-        return this.categoriesRepository.find();
+        return this.categoriesRepository.find({order: {name: "ASC"}});
     }
 
     findOne(id: number) {
@@ -50,6 +53,22 @@ export class CategoryService {
     }
 
     remove(id: number) {
-        return this.categoriesRepository.delete(id);
+        return this.categoriesRepository.findOneBy({ id }).then(categoryFound => {
+            if (!categoryFound) {
+                throw new ConflictException("category does not exist");
+            } else {
+                return this.transactionsRepository.exist({
+                    where: {
+                        category: categoryFound,
+                    }
+                }).then(exists => {
+                    if (exists) {
+                        throw new ConflictException("category is associated with transactions");
+                    } else {
+                        return this.categoriesRepository.delete(id);
+                    }
+                })
+            }
+        });
     }
 }
