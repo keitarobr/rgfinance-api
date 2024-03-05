@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "./category.entity";
+import { Account } from "./account.entity";
 
 @Entity()
 export class MonetaryTransaction {
@@ -15,5 +16,8 @@ export class MonetaryTransaction {
 
     @ManyToOne(() => Category, { nullable: false })
     category: Category;
+
+    @ManyToOne(() => Account, { nullable: false })
+    account: Account;
 
 }
