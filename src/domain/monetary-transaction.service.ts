@@ -8,6 +8,8 @@ import { Category } from './category.entity';
 
 @Injectable()
 export class MonetaryTransactionService {
+    
+
     constructor(
         @InjectRepository(MonetaryTransaction)
         private transactionsRepository: Repository<MonetaryTransaction>,
@@ -41,6 +43,19 @@ export class MonetaryTransactionService {
 
     findAll() {
         return this.transactionsRepository.find();
+    }
+
+    findAllForAccount(accountId: number) {
+        return this.transactionsRepository.find({      
+            relations: {
+                account: true,
+            },
+            where: {
+                account: {
+                    id: accountId,
+                },
+            }
+        });
     }
 
     findOne(id: number) {

@@ -37,6 +37,11 @@ export class MonetaryTransactionController {
         return this.transactionService.findAll();
     }
 
+    @Get("/account/:id")
+    findAllForAccount(@Param('id', ParseIntPipe) accountId: number) {
+        return this.transactionService.findAllForAccount(accountId);
+    }
+
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number) {
         return this.transactionService.findOne(id);
