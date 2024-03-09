@@ -5,6 +5,7 @@ import { MonetaryTransaction } from './monetary-transaction.entity';
 import { CreateMonetaryTransactionDTO } from './create-monetary-transaction.dto';
 import { MonetaryTransactionDTO } from './monetary-transaction.dto';
 import { Category } from './category.entity';
+import { truncate } from 'fs';
 
 @Injectable()
 export class MonetaryTransactionService {
@@ -42,13 +43,19 @@ export class MonetaryTransactionService {
     }
 
     findAll() {
-        return this.transactionsRepository.find();
+        return this.transactionsRepository.find({
+            relations: {
+                account: true,
+                category: true,
+            }
+        });
     }
 
     findAllForAccount(accountId: number) {
         return this.transactionsRepository.find({      
             relations: {
                 account: true,
+                category: true,
             },
             where: {
                 account: {
