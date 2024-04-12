@@ -5,6 +5,7 @@ import { CategoryDTO } from './category.dto';
 import { CreateCategoryDTO } from './create-category.dto';
 import { Category } from './category.entity';
 import { MonetaryTransaction } from './monetary-transaction.entity';
+import stringComparison from 'string-comparison'
 
 @Injectable()
 export class CategoryService {
@@ -70,5 +71,20 @@ export class CategoryService {
                 })
             }
         });
+    }
+
+    async locateClosest(name: string):Promise<Category> {
+        const categories: Category[] = await this.categoriesRepository.find()
+        let closest = null
+        let closestValue = Number.MIN_VALUE
+        let simFunc = stringComparison.levenshtein
+        categories.forEach(category => {
+            const simValue = simFunc.similarity(name, category.name)
+            if (simValue > closestValue) {
+                closestValue = simValue
+                closest = category
+            }
+        })
+        return closest
     }
 }

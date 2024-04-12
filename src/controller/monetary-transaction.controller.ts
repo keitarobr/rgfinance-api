@@ -66,4 +66,16 @@ export class MonetaryTransactionController {
     remove(@Param('id', ParseIntPipe) id: number) {
         return this.transactionService.remove(id);
     }
+
+    @Post("/parse")
+    parse(@Body() transactionList: {transactions: string[], dateFormat: string}) {
+        return this.transactionService.parse(transactionList.transactions, transactionList.dateFormat).catch((error) => {
+            throw new HttpException({
+                status: HttpStatus.BAD_REQUEST,
+                error: 'Error parsing: ' + error,
+            }, HttpStatus.BAD_REQUEST, {
+                cause: error
+            });
+        })
+    }
 }
